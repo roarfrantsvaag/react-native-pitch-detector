@@ -19,10 +19,12 @@ class BaseProcessor: PitchEngineDelegate {
         let range = NSMakeRange(0, pitch.note.string.count)
        
         let tone = regex.stringByReplacingMatches(in: pitch.note.string, range: range, withTemplate: "")
+
+        let toneWithOctave = pitch.note.string
         let frequency = pitch.frequency
 
         var data = Dictionary<String, Any?>()
-        data["tone"] = tone
+        data["tone"] = toneWithOctave
         data["frequency"] = frequency
         
         EventEmitterUtils.shared.dispatch(Events.DATA, data)
