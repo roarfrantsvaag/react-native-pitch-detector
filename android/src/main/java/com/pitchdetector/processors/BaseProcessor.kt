@@ -33,17 +33,17 @@ open class BaseProcessor() {
   }
 
   private fun process(pitchInHz: Float) {
-    val midiNote = round(12 * log2(pitchInHz / 440) + 69).toInt()
-    val index = midiNote % 12
-    val octave = (midiNote / 12) - 1  // Subtract 1 because MIDI note 12 is C1, so MIDI note 0 is C-1
+      if (pitchInHz > 0) {  // Check if pitchInHz is greater than zero
+        val midiNote = round(12 * log2(pitchInHz / 440) + 69).toInt()
+        val index = midiNote % 12
+        val octave = (midiNote / 12) - 1  // MIDI note 12 is C1, MIDI note 0 is C-1
 
-    if (!midiNote.isNaN() && pitchInHz > 0) {
         val tone = tones[index]
         val noteWithOctave = "$tone$octave"  // Combines note and octave
 
         val data: WritableMap = WritableNativeMap()
         data.putDouble("frequency", pitchInHz.toDouble())
-        data.putString("tone", noteWithOctave)  // Now includes octave
+        data.putString("tone", noteWithOctave)
 
         emitter?.emit("data", data)
     }
